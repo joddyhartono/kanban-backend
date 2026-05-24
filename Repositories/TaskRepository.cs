@@ -18,5 +18,21 @@ namespace Kanban.Api.Repositories
                 return connection.Query<Models.Task>(TaskQueries.GetTasks).ToList();
             }
         }
+
+        public int GetOrder(string Status)
+        {
+            using (var connection = CreateConnection())
+            {
+                return connection.ExecuteScalar<int>(TaskQueries.GetOrder, new {Status = Status});
+            }
+        }
+
+        public Models.Task CreateTask(Models.Task task)
+        {
+            using (var connection = CreateConnection())
+            {
+                return connection.QuerySingle<Models.Task>(TaskQueries.CreateTask, task);
+            }
+        }
     }
 }

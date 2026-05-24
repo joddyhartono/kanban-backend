@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Kanban.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("/tasks")]
     [ApiController]
     public class TaskController : ControllerBase
     {
@@ -27,7 +27,24 @@ namespace Kanban.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "An error occurred while getting tasks.");
+                _logger.LogError(e, "An error occurred while getting tasks");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateTask([FromBody] Models.Task task)
+        {
+            _logger.LogInformation("CreateTask started");
+            try
+            {
+                task.SortOrder = _repository.GetOrder("To do");
+                var createdTask = _repository.CreateTask(task);
+                return CreatedAtAction(nameof(CreateTask), createdTask);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while creating task");
                 return StatusCode(500, "Internal server error");
             }
         }
