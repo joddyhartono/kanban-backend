@@ -34,5 +34,13 @@ namespace Kanban.Api.Repositories
                 return connection.QuerySingle<Models.Task>(TaskQueries.CreateTask, task);
             }
         }
+
+        public Models.Task MoveTask(Models.Task task)
+        {
+            using (var connection = CreateConnection())
+            {
+                return connection.QuerySingle<Models.Task>(TaskQueries.MoveTask, task);
+            }
+        }
     }
 }

@@ -44,7 +44,23 @@ namespace Kanban.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "An error occurred while creating task");
+                _logger.LogError(e, "An error occurred while creating a task");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPatch("{id}/status")]
+        public IActionResult MoveTask([FromBody] Models.Task task)
+        {
+            _logger.LogInformation("MoveTask started");
+            try
+            {
+                var updatedTask = _repository.MoveTask(task);
+                return Ok(updatedTask);                
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while moving a task");
                 return StatusCode(500, "Internal server error");
             }
         }
