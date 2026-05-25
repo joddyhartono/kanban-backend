@@ -42,5 +42,13 @@ namespace Kanban.Api.Repositories
                 return connection.QuerySingle<Models.Task>(TaskQueries.MoveTask, task);
             }
         }
+
+        public void DeleteTask(int id)
+        {
+            using (var connection = CreateConnection())
+            {
+                connection.Execute(TaskQueries.DeleteTask, new {Id = id});
+            }
+        }
     }
 }

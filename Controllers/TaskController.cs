@@ -23,6 +23,7 @@ namespace Kanban.Api.Controllers
             try
             {
                 var tasks = _repository.GetTasks();
+                _logger.LogInformation("GetTasks success");
                 return Ok(tasks);
             }
             catch (Exception e)
@@ -40,6 +41,7 @@ namespace Kanban.Api.Controllers
             {
                 task.SortOrder = _repository.GetOrder("To do");
                 var createdTask = _repository.CreateTask(task);
+                _logger.LogInformation("CreateTask success");
                 return CreatedAtAction(nameof(CreateTask), createdTask);
             }
             catch (Exception e)
@@ -56,12 +58,36 @@ namespace Kanban.Api.Controllers
             try
             {
                 var updatedTask = _repository.MoveTask(task);
+                _logger.LogInformation("MoveTask success");
                 return Ok(updatedTask);                
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "An error occurred while moving a task");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // [HttpPatch("{id}")]
+        // public IActionResult UpdateTask([FromBody] Models.Task task)
+        // {
+            
+        // }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteTask([FromRoute] int id)
+        {
+            _logger.LogInformation("DeleteTask started");
+            try
+            {
+                _repository.DeleteTask(id);
+                _logger.LogInformation("DeleteTask success");
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while deleting a task");
+                return StatusCode(500, "Internal server error");                
             }
         }
     }
