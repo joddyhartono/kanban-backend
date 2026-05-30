@@ -68,11 +68,22 @@ namespace Kanban.Api.Controllers
             }
         }
 
-        // [HttpPatch("{id}")]
-        // public IActionResult UpdateTask([FromBody] Models.Task task)
-        // {
-            
-        // }
+        [HttpPatch("{id}")]
+        public IActionResult UpdateTask([FromBody] Models.Task task)
+        {
+            _logger.LogInformation("UpdateTask started");
+            try
+            {
+                var updatedTask = _repository.UpdateTask(task);
+                _logger.LogInformation("UpdateTask success");
+                return Ok(updatedTask);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while updating a task");
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteTask([FromRoute] int id)
@@ -88,6 +99,23 @@ namespace Kanban.Api.Controllers
             {
                 _logger.LogError(e, "An error occurred while deleting a task");
                 return StatusCode(500, "Internal server error");                
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetTask([FromRoute] int id)
+        {
+            _logger.LogInformation("GetTask started");
+            try
+            {
+                var task = _repository.GetTask(id);
+                _logger.LogInformation("GetTask success");
+                return Ok(task);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while getting a task");
+                return StatusCode(500, "Internal server error");
             }
         }
     }

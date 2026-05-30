@@ -7,5 +7,7 @@ namespace Kanban.Api.Repositories.Interfaces
         Models.Task CreateTask(Models.Task task);
         Models.Task MoveTask(Models.Task task);
         void DeleteTask(int id);
+        Models.Task GetTask(int id);
+        Models.Task UpdateTask(Models.Task task);
     }
 }
